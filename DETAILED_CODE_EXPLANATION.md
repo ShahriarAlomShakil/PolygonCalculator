@@ -1,761 +1,661 @@
-# PolygonCalculatorApp.java - Line-by-Line Code Explanation
+# Detailed Code Explanation: PolygonCalculatorApp.java
 
-This document provides a comprehensive, line-by-line explanation of the `PolygonCalculatorApp.java` file, breaking down every aspect of the code for educational purposes.
+This document provides a comprehensive line-by-line explanation of the `PolygonCalculatorApp.java` file, which implements a JavaFX application for calculating polygon area and perimeter with visual representation.
 
-## File Header and Package Declaration
+## Package Declaration and Imports (Lines 1-14)
 
+### Line 1:
 ```java
 package com.polygon;
 ```
-**Line 1**: Declares the package name `com.polygon`. This follows Java naming conventions where package names are typically lowercase and use reverse domain notation.
+Declares the package name as `com.polygon`, organizing the class within this namespace to avoid naming conflicts.
 
-## Import Statements (Lines 3-14)
-
+### Lines 3-14: Import Statements
 ```java
 import javafx.application.Application;
 ```
-**Line 3**: Imports the `Application` class from JavaFX, which serves as the base class for all JavaFX applications. Every JavaFX app must extend this class.
+**Line 3**: Imports the `Application` class, which is the base class for all JavaFX applications. Our class must extend this to create a GUI application.
 
 ```java
 import javafx.geometry.Insets;
 ```
-**Line 4**: Imports `Insets` class used for setting padding and margins around UI components.
+**Line 4**: Imports `Insets` class for defining padding/margins around UI components.
 
 ```java
 import javafx.geometry.Pos;
 ```
-**Line 5**: Imports `Pos` enumeration used for positioning and alignment of UI components within their containers.
+**Line 5**: Imports `Pos` enumeration for positioning/alignment of UI elements within containers.
 
 ```java
 import javafx.scene.Scene;
 ```
-**Line 6**: Imports `Scene` class which represents the content area of a JavaFX window/stage.
+**Line 6**: Imports `Scene` class, which represents the content of a stage (window) in JavaFX.
 
 ```java
 import javafx.scene.canvas.Canvas;
-```
-**Line 7**: Imports `Canvas` class which provides a drawing surface for 2D graphics operations.
-
-```java
 import javafx.scene.canvas.GraphicsContext;
 ```
-**Line 8**: Imports `GraphicsContext` class which provides the drawing API for the Canvas. This is similar to a graphics context in other GUI frameworks.
+**Lines 7-8**: Import canvas-related classes for drawing graphics. `Canvas` provides a drawing surface, and `GraphicsContext` provides the drawing API.
 
 ```java
 import javafx.scene.control.*;
 ```
-**Line 9**: Wildcard import for all JavaFX controls (Button, Label, TextField, Alert, etc.). The asterisk (*) imports all classes from the `javafx.scene.control` package.
+**Line 9**: Wildcard import for all JavaFX control classes (Button, TextField, Label, Alert, etc.).
 
 ```java
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 ```
-**Line 10**: Imports `HBox` layout container that arranges children horizontally in a single row.
-
-```java
-import javafx.scene.layout.VBox;
-```
-**Line 11**: Imports `VBox` layout container that arranges children vertically in a single column.
+**Line 10**: Wildcard import for all JavaFX layout classes (BorderPane, VBox, HBox, etc.).
 
 ```java
 import javafx.scene.paint.Color;
 ```
-**Line 12**: Imports `Color` class for defining colors used in graphics operations.
+**Line 11**: Imports `Color` class for defining colors in the UI.
 
 ```java
 import javafx.scene.text.Font;
-```
-**Line 13**: Imports `Font` class for customizing text appearance.
-
-```java
 import javafx.scene.text.FontWeight;
 ```
-**Line 14**: Imports `FontWeight` enumeration for specifying font thickness (NORMAL, BOLD, etc.).
+**Lines 12-13**: Import font-related classes for text styling.
 
 ```java
 import javafx.stage.Stage;
 ```
-**Line 15**: Imports `Stage` class which represents the top-level container (window) in JavaFX.
+**Line 14**: Imports `Stage` class, which represents a window in JavaFX applications.
 
-## Class Declaration (Line 17)
+## Class Declaration and Instance Variables (Lines 16-23)
 
+### Line 16:
 ```java
 public class PolygonCalculatorApp extends Application {
 ```
-**Line 17**: 
-- `public`: Makes the class accessible from anywhere
-- `class PolygonCalculatorApp`: Defines the class name following CamelCase convention
-- `extends Application`: Inherits from JavaFX Application class, making this a JavaFX application
+Declares the main class `PolygonCalculatorApp` that extends `Application`. This inheritance makes it a JavaFX application that can be launched.
 
-## Instance Variables (Lines 19-24)
-
+### Lines 18-23: Instance Variables
 ```java
 private TextField sidesInput;
-```
-**Line 19**: Declares a private TextField for user input of polygon sides. `private` ensures encapsulation.
-
-```java
 private TextField sideLength;
 ```
-**Line 20**: Declares a private TextField for user input of side length.
+**Lines 18-19**: Declare text fields for user input - number of polygon sides and side length.
 
 ```java
 private Label areaResult;
-```
-**Line 21**: Declares a private Label to display the calculated area result.
-
-```java
 private Label perimeterResult;
 ```
-**Line 22**: Declares a private Label to display the calculated perimeter result.
+**Lines 20-21**: Declare labels to display calculated area and perimeter results.
 
 ```java
 private Canvas canvas;
-```
-**Line 23**: Declares a private Canvas for drawing the polygon visualization.
-
-```java
 private GraphicsContext gc;
 ```
-**Line 24**: Declares a private GraphicsContext for performing drawing operations on the canvas.
+**Lines 22-23**: Declare canvas for drawing polygon visualization and its graphics context for drawing operations.
 
-## Start Method - Application Entry Point (Line 26)
+## Main Application Entry Point (Lines 25-51)
 
+### Line 25:
 ```java
 @Override
 public void start(Stage primaryStage) {
 ```
-**Line 26-27**: 
-- `@Override`: Annotation indicating this method overrides the parent class method
-- `public void start(Stage primaryStage)`: The main entry point method for JavaFX applications, called after the JavaFX runtime initializes
-- `primaryStage`: The primary window/stage provided by JavaFX
+Overrides the abstract `start()` method from `Application` class. This is the main entry point where the UI is constructed and displayed.
 
+### Line 26:
 ```java
-primaryStage.setTitle("Regular Polygon Area & Perimeter Calculator");
+primaryStage.setTitle("Polygon Calculator Pro");
 ```
-**Line 28**: Sets the window title that appears in the title bar.
+Sets the window title that appears in the title bar.
 
-## UI Component Creation (Lines 30-55)
-
+### Lines 28-30:
 ```java
-// Create UI components
-Label titleLabel = new Label("Regular Polygon Calculator");
+// Create main container with gradient background
+BorderPane root = new BorderPane();
+root.setStyle("-fx-background-color: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);");
 ```
-**Line 30-31**: 
-- Line 30: Comment explaining the following code section
-- Line 31: Creates a Label with the title text for the application header
+**Line 29**: Creates a `BorderPane` as the root container, which allows positioning components in five regions (top, bottom, left, right, center).
+**Line 30**: Applies CSS styling to create a blue-to-purple gradient background.
 
+### Lines 32-34:
 ```java
-titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+// Create header
+VBox header = createHeader();
+root.setTop(header);
 ```
-**Line 32**: Sets the font for the title label:
-- `Font.font()`: Static method to create a Font object
-- `"Arial"`: Font family name
-- `FontWeight.BOLD`: Makes text bold
-- `18`: Font size in points
+Creates the header section by calling `createHeader()` method and positions it at the top of the BorderPane.
 
+### Lines 36-38:
 ```java
-Label sidesLabel = new Label("Number of sides:");
+// Create main content area
+HBox mainContent = createMainContent();
+root.setCenter(mainContent);
 ```
-**Line 34**: Creates a descriptive label for the sides input field.
+Creates the main content area and positions it in the center of the BorderPane.
 
+### Lines 40-42:
 ```java
-sidesInput = new TextField();
+// Create footer
+HBox footer = createFooter();
+root.setBottom(footer);
 ```
-**Line 35**: Instantiates the TextField for sides input (previously declared as instance variable).
+Creates the footer section and positions it at the bottom of the BorderPane.
 
+### Line 44:
 ```java
-sidesInput.setPromptText("Enter number of sides (3 or more)");
+Scene scene = new Scene(root, 1000, 700);
 ```
-**Line 36**: Sets placeholder text that appears when the field is empty, providing user guidance.
+Creates a new Scene with the root BorderPane, setting initial dimensions to 1000x700 pixels.
 
+### Lines 46-47:
 ```java
-sidesInput.setPrefWidth(200);
+// Add CSS styling
+scene.getStylesheets().add("data:text/css," + getCustomCSS());
 ```
-**Line 37**: Sets the preferred width of the text field to 200 pixels.
+Adds custom CSS styling to the scene by calling `getCustomCSS()` method.
 
-```java
-Label lengthLabel = new Label("Side length:");
-```
-**Line 39**: Creates a descriptive label for the side length input field.
-
-```java
-sideLength = new TextField();
-```
-**Line 40**: Instantiates the TextField for side length input.
-
-```java
-sideLength.setPromptText("Enter side length");
-```
-**Line 41**: Sets placeholder text for the side length field.
-
-```java
-sideLength.setPrefWidth(200);
-```
-**Line 42**: Sets the preferred width to match the sides input field for visual consistency.
-
-```java
-Button calculateButton = new Button("Calculate");
-```
-**Line 44**: Creates a button with "Calculate" text.
-
-```java
-calculateButton.setPrefWidth(150);
-```
-**Line 45**: Sets the button width to 150 pixels.
-
-```java
-calculateButton.setOnAction(e -> calculatePolygon());
-```
-**Line 46**: Sets the button's click event handler using a lambda expression:
-- `e ->`: Lambda parameter (the ActionEvent, though not used here)
-- `calculatePolygon()`: Method to call when button is clicked
-
-```java
-areaResult = new Label("Area: ");
-```
-**Line 48**: Initializes the area result label with default text.
-
-```java
-areaResult.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-```
-**Line 49**: Sets bold font for the area result display.
-
-```java
-perimeterResult = new Label("Perimeter: ");
-```
-**Line 51**: Initializes the perimeter result label with default text.
-
-```java
-perimeterResult.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-```
-**Line 52**: Sets bold font for the perimeter result display.
-
-```java
-Button clearButton = new Button("Clear");
-```
-**Line 54**: Creates a "Clear" button for resetting the application.
-
-```java
-clearButton.setPrefWidth(150);
-```
-**Line 55**: Sets the clear button width to match the calculate button.
-
-```java
-clearButton.setOnAction(e -> clearFields());
-```
-**Line 56**: Sets the clear button's click event handler to call the `clearFields()` method.
-
-## Canvas Setup (Lines 58-61)
-
-```java
-// Create canvas for drawing polygon
-canvas = new Canvas(300, 300);
-```
-**Line 58-59**: 
-- Line 58: Comment describing the canvas creation
-- Line 59: Creates a 300x300 pixel canvas for polygon visualization
-
-```java
-gc = canvas.getGraphicsContext2D();
-```
-**Line 60**: Gets the 2D graphics context from the canvas, which provides drawing methods.
-
-```java
-clearCanvas();
-```
-**Line 61**: Calls the `clearCanvas()` method to initialize the canvas with a clean state.
-
-## Layout Creation - Left Panel (Lines 63-78)
-
-```java
-// Left side layout with controls
-VBox leftPanel = new VBox(15);
-```
-**Line 63-64**: 
-- Line 63: Comment explaining the left panel
-- Line 64: Creates a vertical box layout with 15 pixels spacing between children
-
-```java
-leftPanel.setAlignment(Pos.CENTER);
-```
-**Line 65**: Centers all child components horizontally within the VBox.
-
-```java
-leftPanel.setPadding(new Insets(20));
-```
-**Line 66**: Adds 20 pixels of padding around all sides of the VBox.
-
-```java
-leftPanel.getChildren().addAll(
-    titleLabel,
-    sidesLabel,
-    sidesInput,
-    lengthLabel,
-    sideLength,
-    calculateButton,
-    areaResult,
-    perimeterResult,
-    clearButton
-);
-```
-**Line 67-77**: Adds all the UI components to the left panel in vertical order. The `addAll()` method accepts multiple components and adds them as children of the VBox.
-
-## Layout Creation - Right Panel (Lines 79-87)
-
-```java
-// Right side layout with canvas
-VBox rightPanel = new VBox(10);
-```
-**Line 79-80**: Creates a vertical box for the right side with 10 pixels spacing.
-
-```java
-rightPanel.setAlignment(Pos.CENTER);
-```
-**Line 81**: Centers the canvas and its label horizontally.
-
-```java
-rightPanel.setPadding(new Insets(20));
-```
-**Line 82**: Adds 20 pixels padding around the right panel.
-
-```java
-Label canvasLabel = new Label("Polygon Visualization");
-```
-**Line 83**: Creates a label to describe the canvas area.
-
-```java
-canvasLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-```
-**Line 84**: Sets bold font for the canvas label.
-
-```java
-rightPanel.getChildren().addAll(canvasLabel, canvas);
-```
-**Line 85**: Adds the canvas label and canvas to the right panel.
-
-## Main Layout Creation (Lines 87-95)
-
-```java
-// Main layout
-HBox root = new HBox(20);
-```
-**Line 87-88**: Creates a horizontal box layout with 20 pixels spacing to hold the left and right panels side by side.
-
-```java
-root.setAlignment(Pos.CENTER);
-```
-**Line 89**: Centers the panels vertically within the main layout.
-
-```java
-root.setPadding(new Insets(10));
-```
-**Line 90**: Adds 10 pixels padding around the entire layout.
-
-```java
-root.getChildren().addAll(leftPanel, rightPanel);
-```
-**Line 91**: Adds both panels to the main horizontal layout.
-
-## Scene and Stage Configuration (Lines 93-97)
-
-```java
-Scene scene = new Scene(root, 750, 400);
-```
-**Line 93**: Creates a Scene with the root layout and sets the window size to 750x400 pixels.
-
+### Lines 49-51:
 ```java
 primaryStage.setScene(scene);
-```
-**Line 94**: Attaches the scene to the primary stage (window).
-
-```java
-primaryStage.setResizable(false);
-```
-**Line 95**: Prevents the user from resizing the window to maintain the intended layout.
-
-```java
+primaryStage.setMinWidth(800);
+primaryStage.setMinHeight(600);
 primaryStage.show();
 ```
-**Line 96**: Makes the window visible to the user.
+**Line 49**: Sets the scene to the primary stage.
+**Line 50**: Sets minimum window width to 800 pixels.
+**Line 51**: Sets minimum window height to 600 pixels.
+**Line 52**: Makes the window visible.
 
-## Calculate Polygon Method (Lines 99-129)
+## Header Creation Method (Lines 54-72)
 
+### Line 55:
+```java
+private VBox createHeader() {
+```
+Private method that creates and returns the header section as a VBox container.
+
+### Lines 56-58:
+```java
+VBox header = new VBox(10);
+header.setAlignment(Pos.CENTER);
+header.setPadding(new Insets(20, 20, 10, 20));
+```
+**Line 56**: Creates a VBox with 10 pixels spacing between children.
+**Line 57**: Centers all child elements horizontally.
+**Line 58**: Sets padding (top: 20, right: 20, bottom: 10, left: 20).
+
+### Lines 60-63:
+```java
+Label titleLabel = new Label("🔷 Polygon Calculator Pro");
+titleLabel.setFont(Font.font("System", FontWeight.BOLD, 32));
+titleLabel.setTextFill(Color.WHITE);
+titleLabel.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 2);");
+```
+**Line 60**: Creates main title label with diamond emoji.
+**Line 61**: Sets font to bold system font, size 32.
+**Line 62**: Sets text color to white.
+**Line 63**: Adds drop shadow effect for visual depth.
+
+### Lines 65-67:
+```java
+Label subtitleLabel = new Label("Calculate area and perimeter of regular polygons");
+subtitleLabel.setFont(Font.font("System", FontWeight.NORMAL, 16));
+subtitleLabel.setTextFill(Color.LIGHTGRAY);
+```
+Creates subtitle with description, normal weight font size 16, and light gray color.
+
+### Lines 69-71:
+```java
+header.getChildren().addAll(titleLabel, subtitleLabel);
+return header;
+```
+Adds both labels to the header VBox and returns it.
+
+## Main Content Creation Method (Lines 74-87)
+
+### Line 75:
+```java
+private HBox createMainContent() {
+```
+Creates the main content area as a horizontal box container.
+
+### Lines 76-78:
+```java
+HBox mainContent = new HBox(30);
+mainContent.setAlignment(Pos.CENTER);
+mainContent.setPadding(new Insets(20));
+```
+Creates HBox with 30 pixels spacing, center alignment, and 20 pixels padding.
+
+### Lines 80-85:
+```java
+// Left panel - Input controls
+VBox leftPanel = createInputPanel();
+
+// Right panel - Visualization
+VBox rightPanel = createVisualizationPanel();
+
+mainContent.getChildren().addAll(leftPanel, rightPanel);
+return mainContent;
+```
+Creates left panel for inputs, right panel for visualization, adds both to main content, and returns it.
+
+## Input Panel Creation Method (Lines 89-178)
+
+### Lines 90-96:
+```java
+private VBox createInputPanel() {
+VBox panel = new VBox(20);
+panel.setAlignment(Pos.TOP_CENTER);
+panel.setPrefWidth(350);
+panel.setStyle("-fx-background-color: rgba(255, 255, 255, 0.95); " +
+              "-fx-background-radius: 15; " +
+              "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);");
+panel.setPadding(new Insets(30));
+```
+Creates the left input panel with white semi-transparent background, rounded corners, drop shadow, and padding.
+
+### Lines 98-101:
+```java
+// Input controls section
+Label inputLabel = new Label("📐 Input Parameters");
+inputLabel.setFont(Font.font("System", FontWeight.BOLD, 18));
+inputLabel.setTextFill(Color.valueOf("#2c3e50"));
+```
+Creates section header with ruler emoji, bold font, and dark blue-gray color.
+
+### Lines 103-117:
+```java
+// Number of sides input
+VBox sidesGroup = new VBox(8);
+Label sidesLabel = new Label("Number of Sides");
+sidesLabel.setFont(Font.font("System", FontWeight.MEDIUM, 14));
+sidesLabel.setTextFill(Color.valueOf("#34495e"));
+
+sidesInput = new TextField();
+sidesInput.setPromptText("Enter 3 or more sides");
+sidesInput.setPrefHeight(40);
+sidesInput.setStyle("-fx-background-radius: 8; -fx-border-radius: 8; " +
+                   "-fx-border-color: #bdc3c7; -fx-border-width: 1; " +
+                   "-fx-font-size: 14px; -fx-padding: 10;");
+// Remove auto-calculation - only calculate when button is pressed
+
+sidesGroup.getChildren().addAll(sidesLabel, sidesInput);
+```
+Creates the number of sides input group with label and styled text field.
+
+### Lines 119-133:
+```java
+// Side length input
+VBox lengthGroup = new VBox(8);
+Label lengthLabel = new Label("Side Length");
+lengthLabel.setFont(Font.font("System", FontWeight.MEDIUM, 14));
+lengthLabel.setTextFill(Color.valueOf("#34495e"));
+
+sideLength = new TextField();
+sideLength.setPromptText("Enter side length");
+sideLength.setPrefHeight(40);
+sideLength.setStyle("-fx-background-radius: 8; -fx-border-radius: 8; " +
+                   "-fx-border-color: #bdc3c7; -fx-border-width: 1; " +
+                   "-fx-font-size: 14px; -fx-padding: 10;");
+// Remove auto-calculation - only calculate when button is pressed
+
+lengthGroup.getChildren().addAll(lengthLabel, sideLength);
+```
+Creates the side length input group with similar styling to the sides input.
+
+### Lines 135-154:
+```java
+// Buttons
+HBox buttonBox = new HBox(15);
+buttonBox.setAlignment(Pos.CENTER);
+
+Button calculateButton = new Button("🧮 Calculate");
+calculateButton.setPrefWidth(120);
+calculateButton.setPrefHeight(45);
+calculateButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; " +
+                        "-fx-background-radius: 8; -fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; -fx-cursor: hand;");
+calculateButton.setOnAction(e -> calculatePolygon());
+
+Button clearButton = new Button("🗑️ Clear");
+clearButton.setPrefWidth(120);
+clearButton.setPrefHeight(45);
+clearButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; " +
+                    "-fx-background-radius: 8; -fx-font-size: 14px; " +
+                    "-fx-font-weight: bold; -fx-cursor: hand;");
+clearButton.setOnAction(e -> clearFields());
+
+buttonBox.getChildren().addAll(calculateButton, clearButton);
+```
+Creates Calculate and Clear buttons with styling and event handlers.
+
+### Lines 156-177:
+```java
+// Results section
+VBox resultsGroup = new VBox(15);
+Label resultsLabel = new Label("📊 Results");
+resultsLabel.setFont(Font.font("System", FontWeight.BOLD, 18));
+resultsLabel.setTextFill(Color.valueOf("#2c3e50"));
+
+areaResult = new Label("Area: Press Calculate to see result");
+areaResult.setFont(Font.font("System", FontWeight.BOLD, 16));
+areaResult.setTextFill(Color.valueOf("#95a5a6"));
+areaResult.setStyle("-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;");
+
+perimeterResult = new Label("Perimeter: Press Calculate to see result");
+perimeterResult.setFont(Font.font("System", FontWeight.BOLD, 16));
+perimeterResult.setTextFill(Color.valueOf("#95a5a6"));
+perimeterResult.setStyle("-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;");
+
+resultsGroup.getChildren().addAll(resultsLabel, areaResult, perimeterResult);
+
+panel.getChildren().addAll(inputLabel, sidesGroup, lengthGroup, buttonBox, resultsGroup);
+return panel;
+```
+Creates the results section with placeholder text and assembles the complete input panel.
+
+## Visualization Panel Creation Method (Lines 181-221)
+
+### Lines 182-188:
+```java
+private VBox createVisualizationPanel() {
+VBox panel = new VBox(20);
+panel.setAlignment(Pos.CENTER);
+panel.setPrefWidth(500);
+panel.setStyle("-fx-background-color: rgba(255, 255, 255, 0.95); " +
+              "-fx-background-radius: 15; " +
+              "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);");
+panel.setPadding(new Insets(30));
+```
+Creates the visualization panel with similar styling to the input panel but wider (500px).
+
+### Lines 190-193:
+```java
+Label visualLabel = new Label("👁️ Polygon Visualization");
+visualLabel.setFont(Font.font("System", FontWeight.BOLD, 18));
+visualLabel.setTextFill(Color.valueOf("#2c3e50"));
+```
+Creates the visualization section header with eye emoji.
+
+### Lines 195-200:
+```java
+canvas = new Canvas(400, 400);
+canvas.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);");
+gc = canvas.getGraphicsContext2D();
+clearCanvas();
+addPlaceholderText();
+```
+Creates a 400x400 pixel canvas with white background and drop shadow, gets graphics context, clears it, and adds placeholder text.
+
+### Lines 202-218:
+```java
+// Info panel for polygon properties
+VBox infoPanel = new VBox(10);
+infoPanel.setStyle("-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 8;");
+
+Label infoLabel = new Label("ℹ️ Polygon Properties");
+infoLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
+infoLabel.setTextFill(Color.valueOf("#2c3e50"));
+
+Label formulaArea = new Label("Area = (n × s²) / (4 × tan(π/n))");
+formulaArea.setFont(Font.font("Monospace", FontWeight.NORMAL, 12));
+formulaArea.setTextFill(Color.valueOf("#7f8c8d"));
+
+Label formulaPerimeter = new Label("Perimeter = n × s");
+formulaPerimeter.setFont(Font.font("Monospace", FontWeight.NORMAL, 12));
+formulaPerimeter.setTextFill(Color.valueOf("#7f8c8d"));
+
+infoPanel.getChildren().addAll(infoLabel, formulaArea, formulaPerimeter);
+```
+Creates an information panel displaying the mathematical formulas used for calculations.
+
+### Lines 220-222:
+```java
+panel.getChildren().addAll(visualLabel, canvas, infoPanel);
+return panel;
+```
+Assembles the visualization panel and returns it.
+
+## Footer Creation Method (Lines 224-235)
+
+### Lines 225-235:
+```java
+private HBox createFooter() {
+HBox footer = new HBox();
+footer.setAlignment(Pos.CENTER);
+footer.setPadding(new Insets(10, 20, 20, 20));
+
+Label footerLabel = new Label("© 2025 Polygon Calculator Pro - Made with JavaFX");
+footerLabel.setFont(Font.font("System", FontWeight.NORMAL, 12));
+footerLabel.setTextFill(Color.LIGHTGRAY);
+
+footer.getChildren().add(footerLabel);
+return footer;
+```
+Creates a simple footer with copyright information.
+
+## CSS Styling Method (Lines 237-248)
+
+### Lines 238-248:
+```java
+private String getCustomCSS() {
+return ".button:hover {\n" +
+       "    -fx-scale-x: 1.05;\n" +
+       "    -fx-scale-y: 1.05;\n" +
+       "    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 8, 0, 0, 3);\n" +
+       "}\n" +
+       "\n" +
+       ".text-field:focused {\n" +
+       "    -fx-border-color: #3498db;\n" +
+       "    -fx-border-width: 2;\n" +
+       "    -fx-effect: dropshadow(three-pass-box, rgba(52,152,219,0.3), 5, 0, 0, 0);\n" +
+       "}";
+```
+Returns CSS string defining hover effects for buttons (scaling and shadow) and focus effects for text fields (blue border and glow).
+
+## Polygon Calculation Method (Lines 252-284)
+
+### Lines 253-255:
 ```java
 private void calculatePolygon() {
-```
-**Line 99**: Declares a private method for polygon calculations.
-
-```java
 try {
-```
-**Line 100**: Begins a try-catch block for error handling.
-
-```java
 int sides = Integer.parseInt(sidesInput.getText().trim());
-```
-**Line 101**: 
-- `sidesInput.getText()`: Gets the text from the input field
-- `.trim()`: Removes leading and trailing whitespace
-- `Integer.parseInt()`: Converts the string to an integer
-- Stores the result in the `sides` variable
-
-```java
 double length = Double.parseDouble(sideLength.getText().trim());
 ```
-**Line 102**: Similar to above, but converts to a double for the side length.
+Method to perform polygon calculations. Parses input values with error handling using try-catch.
 
+### Lines 257-264:
 ```java
 if (sides < 3) {
-    showAlert("Error", "Number of sides must be 3 or more!");
+    showAlert("⚠️ Invalid Input", "Number of sides must be 3 or more!");
     return;
 }
-```
-**Line 104-107**: 
-- Validates that the polygon has at least 3 sides (minimum for a polygon)
-- If invalid, shows an error alert and exits the method early
 
-```java
 if (length <= 0) {
-    showAlert("Error", "Side length must be positive!");
+    showAlert("⚠️ Invalid Input", "Side length must be positive!");
     return;
 }
 ```
-**Line 109-112**: 
-- Validates that the side length is positive
-- If invalid, shows an error alert and exits the method
+Validates input values - sides must be 3 or more, length must be positive.
 
+### Lines 266-270:
 ```java
 // Calculate perimeter (simple: sides * length)
 double perimeter = sides * length;
-```
-**Line 114-115**: 
-- Comment explaining the perimeter calculation
-- Calculates perimeter using the simple formula: number of sides multiplied by side length
 
-```java
 // Calculate area using the formula: (sides * length^2) / (4 * tan(π/sides))
 double area = (sides * Math.pow(length, 2)) / (4 * Math.tan(Math.PI / sides));
 ```
-**Line 117-118**: 
-- Comment explaining the area formula
-- Calculates area using the mathematical formula for regular polygons:
-  - `Math.pow(length, 2)`: Side length squared
-  - `Math.PI / sides`: Central angle in radians
-  - `Math.tan()`: Tangent function
-  - This formula derives from dividing the polygon into triangular sections
+**Line 267**: Calculates perimeter using simple multiplication.
+**Line 270**: Calculates area using the regular polygon formula.
 
+### Lines 272-277:
 ```java
-// Display results
-areaResult.setText(String.format("Area: %.2f square units", area));
-```
-**Line 120-121**: 
-- Comment explaining result display
-- Updates the area label with formatted text showing 2 decimal places
+// Display results with better formatting and proper colors
+areaResult.setText(String.format("📐 Area: %.3f square units", area));
+areaResult.setTextFill(Color.valueOf("#27ae60"));
 
-```java
-perimeterResult.setText(String.format("Perimeter: %.2f units", perimeter));
+perimeterResult.setText(String.format("📏 Perimeter: %.3f units", perimeter));
+perimeterResult.setTextFill(Color.valueOf("#e67e22"));
 ```
-**Line 122**: Updates the perimeter label with formatted text.
+Updates result labels with formatted values (3 decimal places) and appropriate colors (green for area, orange for perimeter).
 
+### Lines 279-284:
 ```java
 // Draw the polygon
 drawPolygon(sides);
-```
-**Line 124-125**: 
-- Comment explaining polygon drawing
-- Calls the method to visualize the polygon
 
-```java
 } catch (NumberFormatException e) {
-    showAlert("Error", "Please enter valid numbers!");
+    showAlert("❌ Input Error", "Please enter valid numbers!");
 }
 ```
-**Line 127-129**: 
-- Catches exceptions thrown when text cannot be parsed as numbers
-- Shows an error alert to inform the user
+Calls method to draw the polygon and handles parsing errors.
 
-## Clear Fields Method (Lines 132-138)
+## Clear Fields Method (Lines 286-298)
 
+### Lines 287-298:
 ```java
 private void clearFields() {
-```
-**Line 132**: Declares a method to reset the application state.
-
-```java
 sidesInput.clear();
-```
-**Line 133**: Clears the sides input field.
-
-```java
 sideLength.clear();
-```
-**Line 134**: Clears the side length input field.
 
-```java
-areaResult.setText("Area: ");
-```
-**Line 135**: Resets the area result to default text.
+// Reset result labels to placeholder state
+areaResult.setText("Area: Press Calculate to see result");
+areaResult.setTextFill(Color.valueOf("#95a5a6"));
 
-```java
-perimeterResult.setText("Perimeter: ");
-```
-**Line 136**: Resets the perimeter result to default text.
+perimeterResult.setText("Perimeter: Press Calculate to see result");
+perimeterResult.setTextFill(Color.valueOf("#95a5a6"));
 
-```java
 clearCanvas();
+addPlaceholderText();
 ```
-**Line 137**: Clears the canvas visualization.
+Clears all input fields, resets result labels to placeholder state with gray color, clears canvas, and adds placeholder text.
 
-## Clear Canvas Method (Lines 140-155)
+## Canvas Methods (Lines 300-310)
 
+### Lines 301-310:
 ```java
 private void clearCanvas() {
-```
-**Line 140**: Declares a method to reset the canvas.
-
-```java
 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-```
-**Line 141**: Clears the entire canvas area using the graphics context.
 
-```java
-// Set background color
-gc.setFill(Color.LIGHTGRAY);
-```
-**Line 143-144**: 
-- Comment explaining background color setting
-- Sets the fill color to light gray
-
-```java
+// Set a clean white background
+gc.setFill(Color.WHITE);
 gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 ```
-**Line 145**: Fills the entire canvas with the light gray background.
+Clears the entire canvas and fills it with white background.
 
-```java
-// Draw border
-gc.setStroke(Color.BLACK);
-```
-**Line 147-148**: 
-- Comment explaining border drawing
-- Sets the stroke (outline) color to black
+## Polygon Drawing Method (Lines 312-349)
 
-```java
-gc.setLineWidth(2);
-```
-**Line 149**: Sets the border line width to 2 pixels.
-
-```java
-gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
-```
-**Line 150**: Draws a black border around the entire canvas.
-
-```java
-// Draw center point
-double centerX = canvas.getWidth() / 2;
-double centerY = canvas.getHeight() / 2;
-```
-**Line 152-154**: 
-- Comment explaining center point
-- Calculates the center coordinates of the canvas
-
-```java
-gc.setFill(Color.RED);
-```
-**Line 155**: Sets the fill color to red for the center point.
-
-```java
-gc.fillOval(centerX - 2, centerY - 2, 4, 4);
-```
-**Line 156**: Draws a small red circle (4x4 pixels) at the center of the canvas.
-
-## Draw Polygon Method (Lines 159-210)
-
+### Lines 313-320:
 ```java
 private void drawPolygon(int sides) {
-```
-**Line 159**: Declares a method to draw a polygon with the specified number of sides.
+// Clear canvas
+gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-```java
-clearCanvas();
-```
-**Line 160**: Clears the canvas before drawing the new polygon.
+// Set a clean white background
+gc.setFill(Color.WHITE);
+gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-```java
 double centerX = canvas.getWidth() / 2;
 double centerY = canvas.getHeight() / 2;
 ```
-**Line 162-163**: Calculates the center coordinates for polygon placement.
+Clears canvas, sets white background, and calculates center coordinates for polygon placement.
 
+### Lines 322-325:
 ```java
-// Use a fixed radius that fits nicely in the canvas
-double radius = Math.min(canvas.getWidth(), canvas.getHeight()) / 2 - 30;
+// Use a dynamic radius that fits nicely in the canvas
+double maxRadius = Math.min(canvas.getWidth(), canvas.getHeight()) / 2 - 40;
+double radius = Math.min(maxRadius, 150);
 ```
-**Line 165-166**: 
-- Comment explaining radius calculation
-- Calculates radius as half the smaller canvas dimension minus 30 pixels for margin
-- `Math.min()` ensures the polygon fits in both width and height
+Calculates appropriate radius for the polygon to fit nicely in the canvas with 40-pixel margin.
 
+### Lines 327-334:
 ```java
 // Calculate polygon vertices
 double[] xPoints = new double[sides];
 double[] yPoints = new double[sides];
-```
-**Line 168-170**: 
-- Comment explaining vertex calculation
-- Creates arrays to store the x and y coordinates of each polygon vertex
 
-```java
 for (int i = 0; i < sides; i++) {
+    double angle = 2 * Math.PI * i / sides - Math.PI / 2; // Start from top
+    xPoints[i] = centerX + radius * Math.cos(angle);
+    yPoints[i] = centerY + radius * Math.sin(angle);
+}
 ```
-**Line 172**: Begins a loop to calculate each vertex position.
+Calculates vertices of the regular polygon using trigonometry. Starting angle is adjusted by -π/2 to start from the top.
 
+### Lines 336-348:
 ```java
-double angle = 2 * Math.PI * i / sides - Math.PI / 2; // Start from top
-```
-**Line 173**: 
-- Calculates the angle for each vertex
-- `2 * Math.PI * i / sides`: Divides full circle by number of sides
-- `- Math.PI / 2`: Offset to start from top (12 o'clock position)
-
-```java
-xPoints[i] = centerX + radius * Math.cos(angle);
-```
-**Line 174**: Calculates x-coordinate using cosine function (polar to Cartesian conversion).
-
-```java
-yPoints[i] = centerY + radius * Math.sin(angle);
-```
-**Line 175**: Calculates y-coordinate using sine function.
-
-```java
-// Draw the polygon
-gc.setStroke(Color.BLUE);
-```
-**Line 178-179**: 
-- Comment explaining polygon drawing
-- Sets stroke color to blue for the polygon outline
-
-```java
-gc.setLineWidth(3);
-```
-**Line 180**: Sets line width to 3 pixels for a prominent outline.
-
-```java
-gc.setFill(Color.LIGHTBLUE);
-```
-**Line 181**: Sets fill color to light blue for the polygon interior.
-
-```java
-// Fill the polygon
+// Fill the polygon with a semi-transparent blue
+gc.setFill(Color.valueOf("#3498db"));
+gc.setGlobalAlpha(0.3);
 gc.fillPolygon(xPoints, yPoints, sides);
-```
-**Line 183-184**: 
-- Comment explaining polygon filling
-- Fills the polygon with the light blue color
 
-```java
+gc.setGlobalAlpha(1.0);
+
 // Draw the polygon outline
+gc.setStroke(Color.valueOf("#2980b9"));
+gc.setLineWidth(3);
 gc.strokePolygon(xPoints, yPoints, sides);
 ```
-**Line 186-187**: 
-- Comment explaining outline drawing
-- Draws the blue outline around the polygon
+Fills polygon with semi-transparent blue, resets alpha, then draws solid blue outline with 3-pixel width.
 
-```java
-// Draw vertices
-gc.setFill(Color.RED);
-for (int i = 0; i < sides; i++) {
-    gc.fillOval(xPoints[i] - 3, yPoints[i] - 3, 6, 6);
-}
-```
-**Line 189-192**: 
-- Comment explaining vertex drawing
-- Sets fill color to red
-- Loops through each vertex and draws a 6x6 pixel red circle
-- Centers each circle on the vertex by subtracting 3 from coordinates
+## Alert Dialog Method (Lines 350-365)
 
-```java
-// Draw center point
-gc.setFill(Color.BLACK);
-gc.fillOval(centerX - 2, centerY - 2, 4, 4);
-```
-**Line 194-196**: 
-- Comment explaining center point
-- Sets fill color to black
-- Draws a small black circle at the polygon center
-
-```java
-// Draw lines from center to vertices (optional - shows structure)
-gc.setStroke(Color.GRAY);
-gc.setLineWidth(1);
-for (int i = 0; i < sides; i++) {
-    gc.strokeLine(centerX, centerY, xPoints[i], yPoints[i]);
-}
-```
-**Line 198-202**: 
-- Comment explaining radial lines
-- Sets stroke color to gray and line width to 1
-- Draws lines from center to each vertex to show polygon structure
-- Helps visualize how the polygon is constructed
-
-## Show Alert Method (Lines 205-211)
-
+### Lines 351-365:
 ```java
 private void showAlert(String title, String message) {
-```
-**Line 205**: Declares a method to display error alerts with custom title and message.
-
-```java
 Alert alert = new Alert(Alert.AlertType.ERROR);
-```
-**Line 206**: Creates an error-type alert dialog.
-
-```java
 alert.setTitle(title);
-```
-**Line 207**: Sets the alert window title.
-
-```java
 alert.setHeaderText(null);
-```
-**Line 208**: Removes the header text (sets to null) for a cleaner appearance.
-
-```java
 alert.setContentText(message);
-```
-**Line 209**: Sets the main message content of the alert.
 
-```java
+// Style the alert dialog
+alert.getDialogPane().setStyle("-fx-background-color: #f8f9fa; " +
+                              "-fx-border-color: #e74c3c; " +
+                              "-fx-border-width: 2; " +
+                              "-fx-border-radius: 10; " +
+                              "-fx-background-radius: 10;");
+
+// Style the content
+alert.getDialogPane().lookup(".content.label").setStyle("-fx-font-size: 14px; " +
+                                                       "-fx-text-fill: #2c3e50;");
+
 alert.showAndWait();
 ```
-**Line 210**: Displays the alert and waits for user to close it before continuing.
+Creates and displays a styled error alert dialog with custom appearance.
 
-## Main Method (Lines 213-215)
+## Placeholder Text Method (Lines 367-374)
 
+### Lines 368-374:
+```java
+private void addPlaceholderText() {
+double centerX = canvas.getWidth() / 2;
+double centerY = canvas.getHeight() / 2;
+gc.setFill(Color.valueOf("#bdc3c7"));
+gc.setFont(Font.font("System", FontWeight.NORMAL, 16));
+gc.fillText("Enter polygon parameters and press Calculate", centerX - 150, centerY - 20);
+gc.fillText("to see visualization", centerX - 70, centerY + 5);
+```
+Adds instructional text to the canvas when no polygon is displayed.
+
+## Main Method (Lines 376-379)
+
+### Lines 377-379:
 ```java
 public static void main(String[] args) {
-```
-**Line 213**: Standard Java main method entry point.
-
-```java
 launch(args);
+}
 ```
-**Line 214**: Calls the JavaFX `launch()` method which:
-- Initializes the JavaFX runtime
-- Creates an instance of the Application class
-- Calls the `start()` method
-- Handles the application lifecycle
+Standard main method that launches the JavaFX application by calling the inherited `launch()` method.
 
 ## Summary
 
-This JavaFX application demonstrates:
+This JavaFX application creates a modern, user-friendly polygon calculator with the following key features:
 
-1. **Object-Oriented Programming**: Proper use of classes, methods, and encapsulation
-2. **Event-Driven Programming**: Button clicks trigger specific actions
-3. **Error Handling**: Try-catch blocks and input validation
-4. **Mathematical Computations**: Trigonometric functions for polygon calculations
-5. **Graphics Programming**: Canvas drawing with various shapes and colors
-6. **UI Design**: Responsive layouts with proper spacing and alignment
-7. **User Experience**: Clear feedback, input validation, and visual representations
+1. **Clean UI Design**: Uses CSS styling, gradients, shadows, and modern color scheme
+2. **Input Validation**: Checks for valid number of sides (≥3) and positive side length
+3. **Mathematical Calculations**: Implements correct formulas for regular polygon area and perimeter
+4. **Visual Feedback**: Draws the calculated polygon on a canvas
+5. **Error Handling**: Shows user-friendly error messages for invalid inputs
+6. **Responsive Layout**: Uses JavaFX layout containers for proper component arrangement
+7. **Interactive Elements**: Hover effects on buttons and focus effects on text fields
 
-The code follows Java best practices with proper naming conventions, comments, and logical organization of functionality.
+The code follows good object-oriented practices by separating concerns into different methods and maintaining clean, readable structure with comprehensive comments.
